@@ -1,10 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Header from "./components/Header";
+import Sidebar from "./components/Sidebar";
+import { Outlet } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <h1>Hello</h1>
+    <div className="">
+      <Header />
+      <div className="flex p-2">
+        <Sidebar />
+        <Outlet />
+      </div>
     </div>
   );
 }
