@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toggleMenu } from "../config/appSlice";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const [searchText, setSearchText] = useState("");
   const dispatch = useDispatch();
   const handleButtonClick = () => {
     dispatch(toggleMenu());
@@ -26,7 +27,13 @@ const Header = () => {
         </Link>
       </div>
       <div>
-        <input type="text" className="p-2 rounded-l-full border w-80" />
+        <input
+          type="text"
+          className="p-2 rounded-l-full border w-80"
+          onChange={(e) => {
+            setSearchText(e.target.value);
+          }}
+        />
         <button className="p-2 bg-slate-200 rounded-r-full border">🔍</button>
       </div>
     </div>
