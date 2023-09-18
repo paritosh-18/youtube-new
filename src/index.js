@@ -8,6 +8,7 @@ import Store from "./config/Store";
 import Body from "./components/Body";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import VideoPlayer from "./components/VideoPlayer";
+import SearchResults from "./components/SearchResults";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -22,6 +23,14 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "video/:id",
+        element: <VideoPlayer />,
+      },
+      {
+        path: "result/:searchtext",
+        element: <SearchResults />,
+      },
+      {
+        path: "result/:searchtext/video/:id",
         element: <VideoPlayer />,
       },
     ],

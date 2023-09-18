@@ -2,9 +2,15 @@ import React, { useEffect, useState } from "react";
 import VideoCard from "./VideoCard";
 import { YOUTUBE_API_KEY } from "../config/constants";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { closeMenu } from "../config/appSlice";
 
 const VideoContainer = () => {
   const [videos, setVideos] = useState([]);
+  const dispatch = useDispatch();
+  const handleClick = () => {
+    dispatch(closeMenu());
+  };
   useEffect(() => {
     fetchVideos();
   }, []);
@@ -21,7 +27,11 @@ const VideoContainer = () => {
   return (
     <div className="flex flex-wrap">
       {videos.map((video) => (
-        <Link to={"/video/" + video?.id} key={video?.id}>
+        <Link
+          to={"/video/" + video?.id}
+          key={video?.id}
+          onClick={() => handleClick()}
+        >
           <VideoCard data={video} />
         </Link>
       ))}
