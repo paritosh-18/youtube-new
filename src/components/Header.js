@@ -1,11 +1,47 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { openMenu, toggleMenu } from "../config/appSlice";
 import { Link } from "react-router-dom";
+import { updateCache } from "../config/cacheSlice";
 
 const Header = () => {
   const [searchText, setSearchText] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const cache = useSelector((store) => store.cache);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (cache.hasOwnProperty(searchText)) {
+        setSuggestions(cache[searchText]);
+      } else {
+        autoCompleteSugg();
+        dispatch(
+          updateCache({
+            [searchText]: suggestions,
+          })
+        );
+      }
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchText]);
+
+  const autoCompleteSugg = async () => {
+    // console.log("API Call- "+searchText);
+    const data = await fetch(
+      `http://suggestqueries.google.com/complete/search?client=firefox&ds=yt&q=${searchText}`
+    );
+    const json = await data.json();
+    // console.log(json);
+    setSuggestions(json[1]);
+
+    // console.log(suggestions);
+  };
+
   const handleButtonClick = () => {
     dispatch(toggleMenu());
   };
@@ -37,7 +73,13 @@ const Header = () => {
       <div>
         <input
           type="text"
-          className="p-2 rounded-l-full border w-80"
+          className="p-2 pl-6 rounded-l-full border w-80"
+          onFocus={() => {
+            setShowSuggestions(true);
+          }}
+          onBlur={() => {
+            setShowSuggestions(false);
+          }}
           onChange={(e) => {
             setSearchText(e.target.value);
           }}
@@ -50,6 +92,13 @@ const Header = () => {
               🔍
             </button>
           </Link>
+        )}
+        {showSuggestions && (
+          <div className="h-96 border bg-white absolute w-[21rem]">
+            {suggestions.map((sug) => {
+              return <h1 className="px-2 my-2">🔍 {sug}</h1>;
+            })}
+          </div>
         )}
       </div>
     </div>

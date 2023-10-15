@@ -28,7 +28,6 @@ const VideoPlayer = () => {
       `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&maxResults=25&regionCode=IN&videoCategoryId=${categoryId}&key=${YOUTUBE_API_KEY}`
     );
     const jsonSuggested = await data2.json();
-    console.log(jsonSuggested);
     setSuggested(jsonSuggested?.items);
   };
 
